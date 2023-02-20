@@ -1,4 +1,4 @@
-## This tool is used to sync files between two Ubuntu Linux systems
+## This tool is used to sync files between two Linux systems
 ### Before using the tool, make sure SSH is installed 
 ```sh 
 sudo apt install ssh
