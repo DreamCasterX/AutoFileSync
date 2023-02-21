@@ -58,3 +58,9 @@ rm mycron
 COMMENT
 
 
+# [Delete cron job]   Uncomment to take effect 
+<<COMMENT
+crontab -l > mycron && > mycron && crontab mycron && rm mycron
+systemctl restart cron
+COMMENT
+
