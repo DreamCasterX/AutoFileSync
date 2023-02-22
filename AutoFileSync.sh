@@ -16,7 +16,7 @@ CRON_LOG="$HOME/Desktop/Update.log"	# SSH Client
 ssh-copy-id -i ~/.ssh/id_rsa.pub $HOST > /dev/null 2>&1
 
 
-# Note: Manually check there's a file "authorized_keys" created under server's ~/.ssd 
+# Manually check there's a file "authorized_keys" created under server's ~/.ssd 
 
 
 # [Client => Enable crontab and output status log for any changes and errors]
@@ -30,7 +30,6 @@ fi
 rm mycron
 
 
-
 # [Client => Enable crontab and output status log for changes Only]  Uncomment to take effect 
 <<COMMENT
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
@@ -42,7 +41,6 @@ if [[ $? != 0 ]]; then
 fi
 rm mycron
 COMMENT
-
 
 
 # [Client => Enable crontab and output error code if sync fails]   Uncomment to take effect 
@@ -64,3 +62,8 @@ crontab -l > mycron && > mycron && crontab mycron && rm mycron
 systemctl restart cron
 COMMENT
 
+
+# [Error handling for SSH fingerprint (public key) not prompted]   Uncomment to take effect 
+<<COMMENT
+ssh-keygen -R $SERVER_IP
+COMMENT
