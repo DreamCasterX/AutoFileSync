@@ -27,7 +27,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub $HOST > /dev/null 2>&1
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
 echo -e  "Now syncing files....\n"
 rsync -azh --delete --progress --out-format="%t  %f  %l" -e "ssh -i ~/.ssh/id_rsa" $HOST:$SOURCE_DIR/ $DESTINATION_DIR && echo -e "\n\nAll files sync completed!" 
-[ $? -eq 0 ] || (echo -e "\n$(date +"%Y/%m/%d %H:%M:%S") File sync FAILED!! Please check network connection" ; exit) && 
+[ $? -eq 0 ] || (echo -e "\n$(date +"%Y/%m/%d %H:%M:%S") File sync FAILED!! Please check the network connection" ; exit) && 
 
 
 # [Create cron job - output both changes and errors]
