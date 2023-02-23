@@ -10,7 +10,7 @@ read -p "Please input server's IP: " SERVER_IP
 HOST="$LOGIN_USER@$SERVER_IP"
 SOURCE_DIR="~/Desktop/Share"	# SSH Server
 DESTINATION_DIR=$HOME/Desktop/Backup	# SSH Client
-CRON_LOG="$HOME/Desktop/Update.log"	# SSH Client
+CRON_LOG="$HOME/Desktop/Report.log"	# SSH Client
 
 # [Client => Generate SSH keys] 
 [[ -f $HOME/.ssh/id_rsa && -f $HOME/.ssh/id_rsa.pub ]] || ssh-keygen -q
