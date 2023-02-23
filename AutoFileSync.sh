@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 
+# CREATOR: Mike Lu
+# CHANGE DATE: 2023/2/23
+
+
 read -p "Please input server's User name: " LOGIN_USER
 read -p "Please input server's IP: " SERVER_IP
 HOST="$LOGIN_USER@$SERVER_IP"
@@ -19,7 +23,14 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub $HOST > /dev/null 2>&1
 # Manually check there's a file "authorized_keys" created under server's ~/.ssd 
 
 
-# [Client => Enable crontab and output status log for any changes and errors]
+# [Initialize file sync]
+[[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
+echo -e  "Now syncing files....\n"
+rsync -azh --delete --progress --out-format="%t  %f  %l" -e "ssh -i ~/.ssh/id_rsa" $HOST:$SOURCE_DIR/ $DESTINATION_DIR && echo -e "\n\nAll files sync completed!" 
+[ $? -eq 0 ] || (echo -e "\n$(date +"%Y/%m/%d %H:%M:%S") File sync FAILED!! Please check network connection" ; exit) && 
+
+
+# [Create cron job - output both changes and errors]
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
 crontab -l > mycron
 grep -h ''$HOST':'$SOURCE_DIR'/ '$DESTINATION_DIR'' mycron > /dev/null 2>&1
@@ -30,7 +41,7 @@ fi
 rm mycron
 
 
-# [Client => Enable crontab and output status log for changes Only]  Uncomment to take effect 
+# [Create cron job - output changes only]  Uncomment to take effect 
 <<COMMENT
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
 crontab -l > mycron
@@ -43,7 +54,7 @@ rm mycron
 COMMENT
 
 
-# [Client => Enable crontab and output error code if sync fails]   Uncomment to take effect 
+# [Create cron job - output errors only]   Uncomment to take effect 
 <<COMMENT
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
 crontab -l > mycron
@@ -58,12 +69,15 @@ COMMENT
 
 # [Delete cron job]   Uncomment to take effect 
 <<COMMENT
-crontab -l > mycron && > mycron && crontab mycron && rm mycron
+crontab -l > mycron && > mycron && crontab mycron && rm mycron 
 systemctl restart cron
+rm $CRON_LOG
 COMMENT
 
 
-# [Error handling for SSH fingerprint (public key) not prompted]   Uncomment to take effect 
+# [Error handling for SSH fingerprint (publisc key) not prompted]  Uncomment to take effect
 <<COMMENT
 ssh-keygen -R $SERVER_IP
 COMMENT
+
+
