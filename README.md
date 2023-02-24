@@ -17,5 +17,5 @@ $HOME/Desktop/Backup
 
 #### Replace the default log path (*CRON_LOG) with your own 
 ```
-"$HOME/Desktop/Update.log"
+"$HOME/Desktop/Report.log"
 ```
