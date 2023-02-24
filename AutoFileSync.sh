@@ -19,7 +19,7 @@ TIME=$(date +"%Y/%m/%d - %H:%M:%S")
 
 
 # [Client => Copy SSH public key to server] 
-ssh-copy-id -i ~/.ssh/id_rsa.pub $HOST > /dev/null 2>&1
+ssh-copy-id -i ~/.ssh/id_rsa.pub $HOST 2> /dev/null
 
 
 # Manually check there's a file "authorized_keys" created under server's ~/.ssd 
