@@ -2,7 +2,7 @@
 
 
 # CREATOR: Mike Lu
-# CHANGE DATE: 2023/2/23
+# CHANGE DATE: 2023/2/24
 
 
 read -p "Please input server's User name: " LOGIN_USER
@@ -11,6 +11,8 @@ HOST="$LOGIN_USER@$SERVER_IP"
 SOURCE_DIR="~/Desktop/Share"	# SSH Server
 DESTINATION_DIR=$HOME/Desktop/Backup	# SSH Client
 CRON_LOG="$HOME/Desktop/Report.log"	# SSH Client
+TIME=$(date +"%Y/%m/%d - %H:%M:%S")
+
 
 # [Client => Generate SSH keys] 
 [[ -f $HOME/.ssh/id_rsa && -f $HOME/.ssh/id_rsa.pub ]] || ssh-keygen -q
@@ -27,7 +29,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub $HOST > /dev/null 2>&1
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
 echo -e  "Now syncing files....\n"
 rsync -azh --delete --progress --out-format="%t  %f  %l" -e "ssh -i ~/.ssh/id_rsa" $HOST:$SOURCE_DIR/ $DESTINATION_DIR && echo -e "\n\nAll files sync completed!" 
-[ $? -eq 0 ] || (echo -e "\n$(date +"%Y/%m/%d %H:%M:%S") File sync FAILED!! Please check the network connection" ; exit) && 
+[ $? -ne 0 ] && echo -e "\n$TIME File sync FAILED!!" 1>&2 && exit 1
 
 
 # [Create cron job - output both changes and errors]
