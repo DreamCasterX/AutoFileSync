@@ -29,7 +29,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub $HOST > /dev/null 2>&1
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
 echo -e  "Now syncing files....\n"
 rsync -azh --delete --progress --out-format="%t  %f  %l" -e "ssh -i ~/.ssh/id_rsa" $HOST:$SOURCE_DIR/ $DESTINATION_DIR && echo -e "\n\nAll files sync completed!" 
-[ $? -ne 0 ] && echo -e "\n$TIME File sync FAILED!!" 1>&2 && exit 1
+[ $? -ne 0 ] && echo -e "\n$TIME File sync FAILED!!" && exit
 
 
 # [Create cron job - output both changes and errors]
@@ -37,7 +37,7 @@ rsync -azh --delete --progress --out-format="%t  %f  %l" -e "ssh -i ~/.ssh/id_rs
 crontab -l > mycron
 grep -h ''$HOST':'$SOURCE_DIR'/ '$DESTINATION_DIR'' mycron > /dev/null 2>&1
 if [[ $? != 0 ]]; then
-    echo '* * * * * rsync -azh --delete --out-format="\%t  \%f  \%l" -e "ssh -i ~/.ssh/id_rsa" '$HOST':'$SOURCE_DIR'/ '$DESTINATION_DIR' >> '$CRON_LOG' || echo "$(date +"\%Y/\%m/\%d \%H:\%M:\%S")  [NETWORK ERROR !!!] File sync failed with error code: $?" >> '$CRON_LOG'' >> mycron
+    echo '*/10 * * * * rsync -azh --delete --out-format="\%t  \%f  \%l" -e "ssh -i ~/.ssh/id_rsa" '$HOST':'$SOURCE_DIR'/ '$DESTINATION_DIR' >> '$CRON_LOG' || echo "$(date +"\%Y/\%m/\%d \%H:\%M:\%S")  [NETWORK ERROR !!!] File sync failed with error code: $?" >> '$CRON_LOG'' >> mycron
     crontab mycron
 fi
 rm mycron
