@@ -8,7 +8,7 @@
 read -p "Please input server's User name: " LOGIN_USER
 read -p "Please input server's IP: " SERVER_IP
 HOST="$LOGIN_USER@$SERVER_IP"
-SOURCE_DIR="~/Desktop/Mkdir"	# SSH Server
+SOURCE_DIR="~/Desktop/Source	# SSH Server
 DESTINATION_DIR=$HOME/Desktop/Backup	# SSH Client
 CRON_LOG="$HOME/Desktop/Report.log"	# SSH Client
 TIME=$(date +"%Y/%m/%d - %H:%M:%S")
