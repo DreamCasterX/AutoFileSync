@@ -2,16 +2,21 @@
 
 
 # CREATOR: Mike Lu
-# CHANGE DATE: 2023/2/24
+# CHANGE DATE: 2023/3/1
 
 
 read -p "Please input server's User name: " LOGIN_USER
 read -p "Please input server's IP: " SERVER_IP
 HOST="$LOGIN_USER@$SERVER_IP"
-SOURCE_DIR="~/Desktop/Share"	# SSH Server
+SOURCE_DIR="~/Desktop/Mkdir"	# SSH Server
 DESTINATION_DIR=$HOME/Desktop/Backup	# SSH Client
 CRON_LOG="$HOME/Desktop/Report.log"	# SSH Client
 TIME=$(date +"%Y/%m/%d - %H:%M:%S")
+
+
+# [Check SSH status]
+systemctl status ssh | grep -w "active (running)" > /dev/null
+[ $? -ne 0 ] && echo -e "[Note]: SSH is not running! Please install SSH before using this tool.\n\nsudo apt install ssh" && exit
 
 
 # [Client => Generate SSH keys] 
