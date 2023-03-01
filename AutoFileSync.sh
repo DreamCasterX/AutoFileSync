@@ -39,7 +39,7 @@ rsync -azh --delete --progress --out-format="%t  %f  %l" -e "ssh -i ~/.ssh/id_rs
 
 # [Create cron job - output both changes and errors]
 [[ -d $DESTINATION_DIR ]] || mkdir $DESTINATION_DIR
-crontab -l > mycron
+crontab -l > mycron 2> /dev/null
 grep -h ''$HOST':'$SOURCE_DIR'/ '$DESTINATION_DIR'' mycron > /dev/null 2>&1
 if [[ $? != 0 ]]; then
     echo '*/10 * * * * rsync -azh --delete --out-format="\%t  \%f  \%l" -e "ssh -i ~/.ssh/id_rsa" '$HOST':'$SOURCE_DIR'/ '$DESTINATION_DIR' >> '$CRON_LOG' || echo "$(date +"\%Y/\%m/\%d \%H:\%M:\%S")  [NETWORK ERROR !!!] File sync failed with error code: $?" >> '$CRON_LOG'' >> mycron
